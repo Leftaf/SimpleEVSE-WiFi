@@ -1188,7 +1188,7 @@ bool ICACHE_FLASH_ATTR startAP(const char * ssid, const char * password = NULL){
 bool ICACHE_FLASH_ATTR loadConfiguration() {
   File configFile = SPIFFS.open("/config.json", "r");
   if (!configFile) {
-    if(debug) Serial.println(F("[ WARN ] Failed to open config file"));
+    Serial.println(F("[ WARN ] Failed to open config file"));
     return false;
   }
   size_t size = configFile.size();
@@ -1197,18 +1197,17 @@ bool ICACHE_FLASH_ATTR loadConfiguration() {
   DynamicJsonBuffer jsonBuffer14;
   JsonObject& json = jsonBuffer14.parseObject(buf.get());
   if (!json.success()) {
-    if(debug) Serial.println(F("[ WARN ] Failed to parse config file"));
+    Serial.println(F("[ WARN ] Failed to parse config file"));
     return false;
   }
-  if(debug) Serial.println(F("[ INFO ] Config file found"));
-  json.prettyPrintTo(Serial);
-  if(debug) Serial.println();
-
-  if (json.containsKey("debug")){
+    if (json.containsKey("debug")){
     debug = json["debug"];
   }
   if(debug){
     Serial.println("Debug Mode: ON!");
+    Serial.println(F("[ INFO ] Config file found"));
+    json.prettyPrintTo(Serial);
+    Serial.println();
   }
   else{
     Serial.println("Debug Mode: OFF!");
@@ -1672,8 +1671,8 @@ void ICACHE_FLASH_ATTR startWebserver() {
 //////////////////////////////////////////////////////////////////////////////////////////
 void ICACHE_FLASH_ATTR setup() {
   Serial.begin(9600);
-  if(debug) Serial.println();
-  if(debug) Serial.println("[ INFO ] SimpleEVSE WiFi");
+  Serial.println();
+  Serial.println("[ INFO ] SimpleEVSE WiFi");
   delay(1000);
   pinMode(D0, INPUT_PULLDOWN_16);
   
